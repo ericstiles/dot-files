@@ -1,0 +1,139 @@
+echo "Loading postgres"
+
+#########################
+#                       #
+#      Variables        #
+#                       #
+#########################
+#export POSTGRES10='/usr/local/opt/postgresql@10'
+#export LDFLAGS="-L/usr/local/opt/postgresql@10/lib"
+#export CPPFLAGS="-I/usr/local/opt/postgresql@10/include"
+#if [[ "$PATH" =~ "$POSTGRES10" ]]; then
+#    echo "PATH already has postgres in it"
+#else
+#    echo "Adding $POSTGRES10/bin to path"
+#    export PATH="$PATH:$POSTGRES10/bin"
+#fi
+
+#########################
+#                       #
+#        Aliases        #
+#                       #
+#########################
+
+#########################
+#                       #
+#         PATH          #
+#                       #
+#########################
+#export PATH=$PATH:~/bin/libpq/bin                    #psql
+#export PATH=$PATH:/usr/local/Cellar/libpq/13.0_1/bin/   #psql
+export PATH=$PATH:/usr/local/Cellar/libpq/13.1/bin/
+export PATH=$PATH:/usr/local/Cellar/libpq/13.2/bin/
+
+
+################################
+#                              #
+#          Functions           #
+#                              #
+################################
+function pgadmin(){
+  # Kill all possible previous pgadmin processes:
+  for pid in $(pgrep -i pgadmin)
+  do
+    kill -9 $pid
+  done
+  # Open new pgadmin process:
+  open -a /Applications/pgAdmin\ 4.app
+}
+
+function setpghost(){
+  options=($(aws rds describe-db-clusters | jq '.DBClusters[].ReaderEndpoint' | tr -d '"'))
+  if [[ ${#options[@]} -eq 1 ]]; then
+    export PGHOST=${options[0]}
+  elif [[ ${#options[@]} -eq 0 ]]; then
+    echo "Check AWS RDS. Can't find RDS endpoint"
+    export PGHOST="EMPTY"
+  else
+    for o in "${!options[@]}"
+    do
+      echo "$o: ${options[$o]}"
+    done
+    re='^[0-9]+$'
+    while read -n1 -r -p 'Choose RDS to set [q to quit]: ' && [[ $REPLY != q ]]; do
+      if [[ "${REPLY}" =~ $re && $REPLY -ge 0 && $REPLY -lt ${#options[@]} ]]; then
+        export PGHOST="${options[$REPLY]}"
+        break;
+      else
+        echo -e ''
+      fi
+    done
+  fi
+  echo -e ''
+  echo "Setting endpoint: $PGHOST"
+}
+
+function pg-stg() {
+    export PG_ENV='pg-stg'
+    export PGUSER='emd'
+    setsecretspgpassword stg
+    setpghost
+}
+
+function pg-prd() {
+    export PG_ENV='pg-prd'
+    export PGUSER='emd'
+    setsecretspgpassword prd
+    setpghost
+}
+
+function pg-local() {
+    export PG_ENV='pg-local'
+    export PGUSER='emd'
+    setsecretspgpassword local
+    export PGHOST='localhost'
+    export POSTGRES_HOST=$PGHOST
+}
+
+function pg-none() {
+    export PG_ENV=''
+    unset PGUSER
+    unset PGPASSWORD
+    unset PGHOST
+}
+
+function pg-exit() {
+    pg-none
+}
+
+function pg-echo() {
+    echo 'PG_ENV     = '$PG_ENV
+    echo 'PGUSER     = '$PGUSER
+    echo 'PGPASSWORD = '$PGPASSWORD
+    echo 'PGHOST     = '$PGHOST
+}
+
+function pg-stg-token() {
+    if [[ "$AWS_VAULT" == "" ]]; then
+        echo "Session not connected to AWS"
+        return 1
+    fi
+    export PG_ENV='pg-stg'
+    export PGUSER='iam_emd'
+    export PGDATABASE='emd'
+    setpghost
+    export PGPASSWORD="$(aws rds generate-db-auth-token --hostname $PGHOST --port 5432 --region us-east-1 --username $PGUSER )"
+}
+
+function pg-prd-token() {
+    if [[ "$AWS_VAULT" == "" ]]; then
+        echo "Session not connected to AWS"
+        return 1
+    fi
+    export PG_ENV='pg-prd'
+    export PGUSER='iam_emd'
+    export PGDATABASE='emd'
+
+    export PGHOST=prd-emd-mirror-566be3a3.cluster-ci4xipdk3vkb.us-east-1.rds.amazonaws.com
+    export PGPASSWORD="$(aws rds generate-db-auth-token --hostname $PGHOST --port 5432 --region us-east-1 --username $PGUSER )"
+}

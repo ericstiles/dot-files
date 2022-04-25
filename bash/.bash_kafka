@@ -1,0 +1,237 @@
+echo "Loading kafka"
+#symlink: ~/bin/kafka -> /Users/s481830/opt/kafka_2.11-2.3.0/
+#symlink: ~/opt/select-utils -> /Users/s481830/repo/sandbox/estiles/select-utils/
+
+################################
+#                              #
+#     KAFKA VARIABLES          #
+#                              #
+################################
+export KAFKA_HOME=~/bin/kafka
+export CLIENT_PROPERTIES=~/select-utils/kafka/client.properties
+
+################################
+#                              #
+#  PATH env updated as needed  #
+#                              #
+################################
+export PATH=$PATH:${KAFKA_HOME}/bin                 #kafka commands
+export PATH=$PATH:${SELECT_UTILS_HOME}/kafka        #kafka general
+export PATH=$PATH:${SELECT_UTILS_HOME}/kafka/bin    #custom kafka scripts
+export PATH=$PATH:${SELECT_UTILS_HOME}/bin          #general select utils scripts
+
+# Used with aliases to set common arguments based on environment
+function setbasekargs(){
+  if [[ -z "$KAFKA_BOOTSTRAP_SERVER" ]]; then
+    echo 'ERROR. Not set: $KAFKA_BOOTSTRAP_SERVER'
+    return 1
+  fi
+  if [[ -z "$1" ]] || ( [[ "$1" -ne '--broker-list' ]] && [[ "$1" -ne '--bootstrap-server' ]] ) ; then
+    echo 'set --broker-list or --bootstrap-server as first argument'
+    return 1
+  fi
+  if [[ -z "$2" ]] && ( [[ "$2" == '--command-config' ]] || [[ "$2" == '--consumer.config' ]] ) ; then
+    echo 'set --command-config or --consumer.config as second argument'
+    return 1
+  fi
+  unset _kargs
+  _kargs=()
+  _kargs+=( "$1" "$KAFKA_BOOTSTRAP_SERVER" )
+
+  if ! [[ "$KAFKA_BOOTSTRAP_SERVER" =~ 'localhost' ]]; then
+    _kargs+=( "$2" "${SELECT_UTILS_HOME}/kafka/client.properties" )
+  fi
+  echo "${_kargs[*]}"
+}
+
+################################
+#                              #
+#          Aliases             #
+#                              #
+################################
+#connect-distributed.sh*
+#connect-standalone.sh*
+#kafka-acls.sh*
+#kafka-broker-api-versions.sh*
+#kafka-configs.sh*
+alias kafka-configs='setbasekargs --bootstrap-server --command-config           && kafka-configs.sh ${_kargs[@]}'
+alias kafka-console-consumer='setbasekargs --bootstrap-server --consumer.config && kafka-console-consumer.sh ${_kargs[@]}'
+alias kafka-console-producer='setbasekargs --broker-list      --command-config  && kafka-console-producer.sh ${_kargs[@]}'
+alias kafka-consumer-groups='setbasekargs  --bootstrap-server --command-config  && kafka-consumer-groups.sh  ${_kargs[@]}'
+#kafka-consumer-perf-test.sh*
+#kafka-delegation-tokens.sh*
+#kafka-delete-records.sh*
+#kafka-dump-log.sh*
+#kafka-log-dirs.sh*
+#kafka-mirror-maker.sh*
+#kafka-preferred-replica-election.sh*
+#kafka-producer-perf-test.sh*
+#kafka-reassign-partitions.sh*
+#kafka-replica-verification.sh*
+#kafka-run-class.sh*
+#kafka-server-start.sh*
+#kafka-server-stop.sh*
+#kafka-streams-application-reset.sh*
+alias kafka-topics='setbasekargs --bootstrap-server --command-config && kafka-topics.sh ${_kargs[@]}'
+#kafka-verifiable-consumer.sh*
+#kafka-verifiable-producer.sh*
+#trogdor.sh*
+#zookeeper-security-migration.sh*
+#zookeeper-server-start.sh*
+#zookeeper-server-stop.sh*
+#zookeeper-shell.sh*
+
+################################
+#                              #
+#          Functions           #
+#                              #
+################################
+function setClusterArn (){
+	export CLUSTER_ARN="$(aws kafka list-clusters | jq '.ClusterInfoList[0].ClusterArn' | tr -d '"')"
+}
+
+function setBootstrapServers(){
+  setClusterArn
+	export KAFKA_BOOTSTRAP_SERVER=$(aws kafka get-bootstrap-brokers --region us-east-1 --cluster-arn  $CLUSTER_ARN | jq '.BootstrapBrokerStringTls' | sed 's/"//g'  )
+
+}
+
+function checkHaystackDI(){
+	kafka-consumer-groups.sh --bootstrap-server ${KAFKA_BOOTSTRAP_SERVER} --command-config ${KAFKA_HOME}client.properties --describe --group $KAFKA_HAYSTACK_GROUP
+}
+
+function k-local(){
+    k-none
+    K_ENV='k-local'
+    export KAFKA_BOOTSTRAP_SERVER=localhost:9092
+    echo "Kafka Bootstrap Servers: $KAFKA_BOOTSTRAP_SERVER"
+}
+
+function k-bs(){
+    setBootstrapServers
+    echo "Kafka Cluster Arn: $CLUSTER_ARN"
+    echo "bootstrap servers: $KAFKA_BOOTSTRAP_SERVER"
+}
+
+function k-stg(){
+  K_ENV='k-stg'
+  export KAFKA_HAYSTACK_GROUP=stg-haystack-data-ingest
+  k-bs
+}
+
+function k-prd(){
+  K_ENV='k-prd'
+  export KAFKA_HAYSTACK_GROUP=prd-haystack-data-ingest
+  k-bs
+}
+
+function k-none(){
+    unset KAFKA_HAYSTACK_GROUP
+    unset CLUSTER_ARN
+    unset KAFKA_BOOTSTRAP_SERVER
+    unset _kargs
+    unset K_ENV
+}
+
+function k-msg() {
+  kafka-console-consumer \
+   --property print.key=true \
+   --property key.separator="|" \
+   --max-messages $1 \
+   --topic $2 \
+   --partition $3 \
+   --offset $4
+}
+
+function k-msg-b() {
+  num_messages=1;
+  if [[ ! -n $2 ]]; then
+    echo "Usage: k-msg-b [partition] [offset] <number of messages>"
+    return 1
+  fi
+  if [[ -n $3 ]]; then
+    num_messages=$3
+  fi
+  k-msg ${num_messages} blackout-periods-delta $1 $2
+}
+
+function k-msg-sp() {
+  num_messages=1;
+  if [[ ! -n $2 ]]; then
+    echo "Usage: k-msg-sp [partition] [offset] <number of messages>"
+    return 1
+  fi
+  if [[ -n $3 ]]; then
+    num_messages=$3
+  fi
+  k-msg ${num_messages} storeproduct-output $1 $2
+}
+
+function k-d() {
+  cmd="--all-groups"
+  if [[ -n $1 ]]; then
+    cmd="--group ${1}"
+  fi
+  kafka-consumer-groups --describe ${cmd}
+}
+
+function k-list() {
+  kafka-topics --list
+}
+
+# Get first message from topic
+function k-fm() {
+  if [[ -z "$KAFKA_BOOTSTRAP_SERVER" ]]; then
+    echo 'ERROR. Not set: $KAFKA_BOOTSTRAP_SERVER'
+    return 1
+  fi
+
+  TOPIC=storeproduct-output
+  if [[ -z "$1" ]]; then
+    echo 'No topic name provided.  Getting default topic:'${TOPIC}
+    return 1
+  else
+    TOPIC=$1
+  fi
+
+  echo "Checking first message of ${TOPIC}"
+  for i in {0..5}; do
+    kafkacat -C -b ${KAFKA_BOOTSTRAP_SERVER} \
+    -t ${TOPIC} \
+    -X security.protocol=SSL \
+    -f '\n  Key (%K bytes): %k \
+  Timestamp: %T \
+  Partition: %p \
+  Offset: %o \
+  Headers: %h\n\n' \
+  -o 0 -p ${i} -c1 -e
+  done
+}
+
+# Get first message from topic
+function k-fm-2() {
+  if [[ -z "$KAFKA_BOOTSTRAP_SERVER" ]]; then
+    echo 'ERROR. Not set: $KAFKA_BOOTSTRAP_SERVER'
+    return 1
+  fi
+
+  TOPIC=storeproduct-output-v2
+  if [[ ! -z "$1" ]]; then
+    TOPIC=$1
+  fi
+
+  echo "Checking first message of ${TOPIC}"
+  for i in {0..5}; do
+
+    RETURN=$(kafkacat -C -b ${KAFKA_BOOTSTRAP_SERVER} \
+    -t ${TOPIC} \
+    -X security.protocol=SSL \
+    -f 'Key: %k Partition: %p Offset: %o Timestamp: %T\n' \
+    -o 0 -p ${i} -c1 -e)
+
+    ARRAY=($RETURN)
+    echo ${RETURN/${ARRAY[7]}/${ARRAY[7]}' -> '$(date -r $((${ARRAY[7]}/1000)))}
+
+  done
+}
+

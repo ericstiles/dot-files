@@ -1,0 +1,97 @@
+echo "Loading aws"
+
+#########################
+#                       #
+#      Variables        #
+#                       #
+#########################
+export AWS_ASSUME_ROLE_TTL=1h
+export AWS_SESSION_TTL=12h
+
+#########################
+#                       #
+#        Aliases        #
+#                       #
+#########################
+alias aws.default.region='export AWS_DEFAULT_REGION=us-east-1'
+alias user='aws-vault exec heb-ecom-data-stg -- aws sts get-caller-identity'
+alias build='aws-vault exec heb-ecom-data-bld-staff'
+alias build-c='aws-vault login heb-ecom-data-bld-staff'
+alias build-pc='aws-vault exec heb-ecom-product-catalog-bld-staff'
+alias stage='aws-vault exec heb-ecom-data-stg-staff'
+alias stage-c='aws-vault login heb-ecom-data-stg-staff'
+alias stage-pc='aws-vault exec heb-ecom-product-catalog-stg-staff'
+alias prod='aws-vault exec heb-ecom-data-prd-staff'
+alias prod-c='aws-vault login heb-ecom-data-prd-staff'
+alias prod-pc='aws-vault exec heb-ecom-product-catalog-prd-staff'
+alias sandbox='aws-vault exec heb-eng-sandbox-staff'
+
+alias dynamodb-admin='export DYNAMO_ENDPOINT=http://localhost:8000; dynamodb-admin'
+
+#########################
+#                       #
+#       aws-vault       #
+#                       #
+#########################
+alias av='aws-vault'
+alias ave='aws-vault exec'
+alias ab='aws-vault exec heb-ecom-data-bld -- '                       # aws data build role
+alias abt='aws-vault exec heb-ecom-data-bld -- terraform '            # aws data build role for terraform
+alias as='aws-vault exec heb-ecom-data-stg -- '                       # aws data stg role
+alias ap='aws-vault exec heb-ecom-data-prd -- '                       # aws data prd role
+
+#########################
+#                       #
+#      Functions        #
+#                       #
+#########################
+aws-stg ()
+{
+    export INGEST_CLUSTER_NAME="stg-data-ingest-tjq8";
+    export INGEST_TASK_NAME="stg-data-ingest-6686a130-single-command";
+    export MATERIALIZE_CLUSTER_NAME="stg-data-mater-q3b3";
+    export MATERIALIZE_TASK_NAME="stg-data-materialize-1b61a660-single-command";
+    aws-vault exec heb-ecom-data-stg -- bash --init-file <(echo ". \"$HOME/.bashrc\"; venv wormhole")
+}
+
+aws-prd ()
+{
+    echo "PROD is not set up yet"
+#    export INGEST_CLUSTER_NAME="stg-data-ingest-tjq8";
+#    export INGEST_TASK_NAME="stg-data-ingest-6686a130-single-command";
+#    export MATERIALIZE_CLUSTER_NAME="stg-data-mater-q3b3";
+#    export MATERIALIZE_TASK_NAME="stg-data-materialize-1b61a660-single-command";
+#    aws-vault exec heb-ecom-data-stg -- bash --init-file <(echo ". \"$HOME/.bashrc\"; venv wormhole")
+}
+
+gg-ssh ()
+{
+    if [[ "$AWS_VAULT" == "" ]]; then
+        echo "Session not connected to AWS";
+        return 1;
+    fi;
+    INSTANCE=$(aws ec2 describe-instances |jq '.Reservations[].Instances[] | select ( .KeyName | contains("emd"))| .InstanceId' | tr -d \");
+    echo "instance->"$INSTANCE
+    ssh -v ec2-user@$INSTANCE
+}
+
+function stg-get-item(){
+  #Todo:get table from aws grepping on $2
+  #Todo:check for number only on id
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "usage: ${FUNCNAME[0]} [root table name] [id int]"
+    return 1
+  fi
+
+  LOWERCASE_TABLE=$(echo ${1} | awk '{print tolower($0)}')
+  FIRST_LETTER=`echo $LOWERCASE_TABLE|cut -c1|tr [a-z] [A-Z]`
+  REST_OF_LETTERS=`echo $LOWERCASE_TABLE|cut -c2-`
+  TABLE=stg-data-ingest-6686a130-${FIRST_LETTER}${REST_OF_LETTERS}
+  ID=${2}
+  ID_KEY=${LOWERCASE_TABLE}Id
+  FILE=stg-${LOWERCASE_TABLE}-${ID}.json
+
+  aws dynamodb get-item \
+   --table-name ${TABLE} \
+   --key '{"'${ID_KEY}'" : {"N":"'${ID}'"}}'
+}

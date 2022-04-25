@@ -1,3 +1,10 @@
+#mac
+.DS_Store
+
+#intellij
+*.iml
+
+
 # Compiled class file
 *.class
 

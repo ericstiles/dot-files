@@ -1,0 +1,48 @@
+echo "loading .common_aliases"
+
+####################
+#                  #
+#    git aliases   #
+#                  #
+####################
+#alias gbc='function _gbc(){ echo "start"; git branch "$1"; echo "middle"; git checkout "$1"; echo "end"  }; _gbc'
+alias g='git'
+alias ga='git add'
+alias gau='git add --update'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbc='git checkout -b'
+alias gc='git checkout'
+alias gca='git commit --amend'
+alias gca='git commit -v -a'
+alias gcm='git commit -m'
+alias gco='git checkout'
+alias gcob='git checkout -b'
+alias gcot='git checkout -t'
+alias gcotb='git checkout --track -b'
+alias gct='git checkout --track'              #git checkout --track origin/branch
+alias gd='git diff | mate'
+alias gd='git diff'
+alias gfo='git fetch origin'
+alias giset='git checkout --orphan newMaster;git add -A;git commit -m "initial commit";git branch -D main;git branch -m main;git push -f origin main;git gc --aggressive --prune=all'
+alias gl='git log'
+alias glp='git log --pretty=format:"%h %s" --graph'
+alias gm='git checkout main'
+alias gmm='git merge main'
+alias gp='git pull'
+alias gph='git push'
+alias gpm='git fetch; git pull origin main'
+alias gr='git reset'
+alias gs='git status'
+alias gt='git stash'
+alias gtp='git stash pop'
+alias gts='git stash save'
+
+
+## quick commit to test a change
+alias qc='git add .; git commit -m "quick commit: cleanup"'
+
+# Just an fyi you can add all your git specific alias to your ~/.gitconfig
+# instead. Then you can add fun stuff like
+#
+# publish = "!pub() { git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD);}; pub"
