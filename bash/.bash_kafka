@@ -1,6 +1,5 @@
 echo "Loading kafka"
 #symlink: ~/bin/kafka -> /Users/s481830/opt/kafka_2.11-2.3.0/
-#symlink: ~/opt/select-utils -> /Users/s481830/repo/sandbox/estiles/select-utils/
 
 ################################
 #                              #
@@ -8,7 +7,6 @@ echo "Loading kafka"
 #                              #
 ################################
 export KAFKA_HOME=~/bin/kafka
-export CLIENT_PROPERTIES=~/select-utils/kafka/client.properties
 
 ################################
 #                              #
@@ -16,9 +14,6 @@ export CLIENT_PROPERTIES=~/select-utils/kafka/client.properties
 #                              #
 ################################
 export PATH=$PATH:${KAFKA_HOME}/bin                 #kafka commands
-export PATH=$PATH:${SELECT_UTILS_HOME}/kafka        #kafka general
-export PATH=$PATH:${SELECT_UTILS_HOME}/kafka/bin    #custom kafka scripts
-export PATH=$PATH:${SELECT_UTILS_HOME}/bin          #general select utils scripts
 
 # Used with aliases to set common arguments based on environment
 function setbasekargs(){

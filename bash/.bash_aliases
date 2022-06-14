@@ -1,27 +1,9 @@
 echo "Loading bash specific aliases"
 
+#remove all existing aliases
+unalias -a
+
 alias reload='source ~/.bash_profile'
-
-alias cdd='repo; cd ./data88'
-alias cdm='repo; cd ./data-model'
-alias cdtg='repo; cd ./select-terragrunt'
-alias cdtf='repo; cd ./select-terraform'
-alias cds='repo; cd ./sandbox/estiles'
-alias cdpc='repo; cd ./heb-ecom-product-catalog'
-alias cdpt='repo; cd ./heb-ecom-product-catalog-terraform'
-alias cdg='repo; cd ./graphql'
-
-alias stg-external='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-stg/environments/stg/wormhole/data-external'
-alias stg-ingest='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-stg/environments/stg/wormhole/data-ingest'
-alias stg-kinesis='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-stg/environments/stg/wormhole/kinesis'
-alias stg-dynamodb='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-stg/environments/stg/wormhole/dynamodb'
-alias stg-emd='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-stg/environments/stg/wormhole/emd-mirror'
-
-alias prd-external='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-prd/environments/prd/wormhole/data-external'
-alias prd-ingest='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-prd/environments/prd/wormhole/data-ingest'
-alias prd-kinesis='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-prd/environments/prd/wormhole/kinesis'
-alias prd-dynamodb='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-prd/environments/prd/wormhole/dynamodb'
-alias prd-emd='cd  ~/repo/heb-ecom-data-terraform/accounts/heb-ecom-data-prd/environments/prd/wormhole/emd-mirror'
 
 #########################
 #                       #
@@ -61,7 +43,6 @@ alias p3="python3"
 alias repo='cd ~/repo'
 alias sqldeveloper='nohup /Applications/SQLDeveloper.app/Contents/MacOS/sqldeveloper.sh &'
 alias sql='sqldeveloper'
-alias slv='source ~/.virtualenvs/select_lambdas_venv/bin/activate'
 alias va='vi ~/.bash_aliases'
 
 alias ls='ls -Gi'                               # Colorize the ls output
@@ -84,8 +65,6 @@ alias cd...="cd ../../.."
 alias cd-="cd -"
 alias dir="ls -al"
 alias dirs="ls -al | grep '^d'"                 # show the dir's in the current dir
-alias tgsapi='repo; cd ./select-terragrunt/accounts/heb-ecom-data-stg/environments/stg/wormhole/data-api/'
-
 
 ## Colorize the grep command output for ease of use (good for log files)##
 alias grep='grep --color=auto'
@@ -109,7 +88,6 @@ alias tfi='terraform init'
 alias tfp='terraform plan'
 alias tfw='terraform workspace'
 alias tftrace='export TF_LOG=TRACE'
-alias tg='~/repo/select-terragrunt/scripts/terragrunt.sh'
 alias agi='aws-vault heb-ecom-data-bld -- terragrunt info'
 alias agp='aws-vault heb-ecom-data-bld -- terragrunt plan'
 alias aga='aws-vault heb-ecom-data-bld -- terragrunt apply'
