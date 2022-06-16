@@ -75,7 +75,6 @@ export PATH="$(go env GOPATH)/bin:$PATH"
 #export JAVA_HOME="/usr/local/Cellar/openjdk@8/1.8.0+322/libexec/openjdk.jdk/Contents/Home"
 export JAVA_HOME="$(/usr/libexec/java_home)"
 
-export JAVA_HOME="/usr/local/Cellar/openjdk@8/1.8.0+322/libexec/openjdk.jdk/Contents/Home"
 
 export HISTTIMEFORMAT="%m/%d/%y %T "
 export HISTSIZE=16000
