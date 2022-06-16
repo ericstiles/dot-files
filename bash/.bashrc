@@ -70,7 +70,10 @@ fi
 export PATH="$(go env GOPATH)/bin:$PATH"
 
 #Using requires attaching process before JVM will continue
-export JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+#export JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+
+#export JAVA_HOME="/usr/local/Cellar/openjdk@8/1.8.0+322/libexec/openjdk.jdk/Contents/Home"
+export JAVA_HOME="$(/usr/libexec/java_home)"
 
 export JAVA_HOME="/usr/local/Cellar/openjdk@8/1.8.0+322/libexec/openjdk.jdk/Contents/Home"
 
