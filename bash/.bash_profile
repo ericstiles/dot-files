@@ -4,3 +4,5 @@ echo 'loading .bash_profile'
 if [ -n "$BASH" ] && [ -r ~/.bashrc ]; then
     . ~/.bashrc
 fi
+
+export JAVA_HOME=$(/usr/libexec/java_home)
