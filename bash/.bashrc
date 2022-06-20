@@ -160,3 +160,7 @@ export NVM_DIR="$HOME/.nvm"
 #future work would be use a single variable in all locations
 mkdir -p ~/.vim_backup/
 mkdir -p ~/.vim_cache/
+
+# SDK
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
