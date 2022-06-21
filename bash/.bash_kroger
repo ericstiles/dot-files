@@ -1,0 +1,4 @@
+echo 'loading kroger aliases'
+
+alias kroger="cd ~/repo/kroger"
+

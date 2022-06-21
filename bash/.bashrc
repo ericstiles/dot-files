@@ -46,11 +46,17 @@ if [ -r "${REPOSITORY_DIR}/bash/.bash_postgres" ]; then
   . ${REPOSITORY_DIR}/bash/.bash_postgres
 fi
 
-if [[ "$(ssh-add -l)" == "The agent has no identities." ]]; then
+
+if [ -r "${REPOSITORY_DIR}/bash/.bash_kroger" ]; then
+  . ${REPOSITORY_DIR}/bash/.bash_kroger
+fi
+
+#if [[ "$(ssh-add -l)" == "The agent has no identities." ]]; then
 #   ssh-add ~/.ssh/prometheus_rsa_stg
 #   ssh-add ~/.ssh/prometheus_rsa_prd
-  echo "no identities to import to ssh-agent"
-fi
+#   echo "no identities to import to ssh-agent"
+#fi
+
 
 ################################
 #                              #
@@ -58,6 +64,10 @@ fi
 #                              #
 ################################
 # export UTILS_HOME=~/opt/utils
+
+export HISTTIMEFORMAT="%m/%d/%y %T "
+export HISTSIZE=16000
+
 
 ################################
 #                              #
@@ -68,19 +78,21 @@ fi
 #Add path for docker utils github project
 # export PATH=${UTILS_HOME}/bin:$PATH
 export PATH="$(go env GOPATH)/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+
+
+################################
+#                              #
+#            JAVA              #
+#                              #
+################################
 
 #Using requires attaching process before JVM will continue
 #export JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
 
 #export JAVA_HOME="/usr/local/Cellar/openjdk@8/1.8.0+322/libexec/openjdk.jdk/Contents/Home"
 export JAVA_HOME="$(/usr/libexec/java_home)"
-
-
-export HISTTIMEFORMAT="%m/%d/%y %T "
-export HISTSIZE=16000
-
-#added for python3 fundamentals class
-#export PATH=$PATH:~/anaconda3/condabin
 
 
 ################################
@@ -143,14 +155,6 @@ function newline-prompt() {
 #export PS1='\h:\W \u\$'
 export PS1='\u: \[\033[38;5;13m\]\w\[\033[00m\]\[\033[0;33m\]$(git-branch-prompt)\[\033[38;5;182m\]$(aws-vault-prompt)\[\033[0;91m\]$(pg-prompt)\[\033[00m\]\[\033[38;5;33m\]$(k-prompt)\[\033[00m\]$(newline-prompt)'
 
-
-export PATH="/usr/local/sbin:$PATH"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
 ################################
 #                              #
 #      Additional Setup        #
@@ -164,3 +168,6 @@ mkdir -p ~/.vim_cache/
 # SDK
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
