@@ -51,6 +51,14 @@ if [ -r "${REPOSITORY_DIR}/bash/.bash_kroger" ]; then
   . ${REPOSITORY_DIR}/bash/.bash_kroger
 fi
 
+
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+  echo 'installed - git autocomplete'
+else
+  echo 'not installed - git auto complete'
+fi
+
 #if [[ "$(ssh-add -l)" == "The agent has no identities." ]]; then
 #   ssh-add ~/.ssh/prometheus_rsa_stg
 #   ssh-add ~/.ssh/prometheus_rsa_prd
@@ -92,7 +100,8 @@ export PATH="/usr/local/sbin:$PATH"
 #export JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
 
 #export JAVA_HOME="/usr/local/Cellar/openjdk@8/1.8.0+322/libexec/openjdk.jdk/Contents/Home"
-export JAVA_HOME="$(/usr/libexec/java_home)"
+#export JAVA_HOME="$(/usr/libexec/java_home)"
+#export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/"
 
 
 ################################
@@ -103,6 +112,7 @@ export JAVA_HOME="$(/usr/libexec/java_home)"
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 
+#echo "$JAVA_HOME"
 #export PATH=~/java//jdk-11.0.8+10/Contents/Home/bin:$PATH
 
 ################################
@@ -148,8 +158,7 @@ function newline-prompt() {
     printf "\n$ "
 }
 
-# source ~/.git-completion.bash
-# source ~/bin/.maven_bash_completion.bash
+
 
 #Original PS1
 #export PS1='\h:\W \u\$'
@@ -165,9 +174,21 @@ export PS1='\u: \[\033[38;5;13m\]\w\[\033[00m\]\[\033[0;33m\]$(git-branch-prompt
 mkdir -p ~/.vim_backup/
 mkdir -p ~/.vim_cache/
 
-# SDK
+# SDKMan
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+source ~/.git_completion.bash
+
+# source ~/bin/.maven_bash_completion.bash
+
+# >>> talisman >>>
+# Below environment variables should not be modified unless you know what you are doing
+//export TALISMAN_HOME=/Users/THW9790/.talisman/bin
+//alias talisman=$TALISMAN_HOME/talisman_darwin_arm64
+//export TALISMAN_INTERACTIVE=true
+# <<< talisman <<<
+

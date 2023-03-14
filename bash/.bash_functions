@@ -1,5 +1,13 @@
 echo "Loading functions"
 
+function setJava(){
+
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/"
+
+}
+
+
+
 #function gorm(){
 #  if [ -z $1 ]
 #  then
@@ -33,6 +41,16 @@ function mcd(){
    exit 1
   fi
   mkdir $1 && cd $1
+}
+
+function jto() {
+  if [ -z "$JAVA_TOOL_OPTIONS" ]; then
+    export JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+    echo 'setting $JAVA_TOOL_OPTIONS:'$JAVA_TOOL_OPTIONS
+  else
+    echo 'unsetting $JAVA_TOOL_OPTIONS:'$JAVA_TOOL_OPTIONS
+    unset JAVA_TOOL_OPTIONS
+  fi
 }
 
 

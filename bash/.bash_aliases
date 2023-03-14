@@ -28,10 +28,11 @@ alias ag='alias  | grep -i'
 alias c='clear'
 alias cls='printf "\033c"'
 alias e='exit'
+alias env='env | sort'
 alias eject='drutil eject'                      # eject cd
 alias h=history                                 # show the history of commands issued
 alias hg='history | grep'
-alias idea='cd ~/IdeaProjects'
+#alias idea='cd ~/IdeaProjects'
 alias ji='jenv versions'
 alias ks='echo "stopping running shaded app"; kill -9 `pgrep -f shaded`'           #Kill running shaded jar
 alias list-java='ll /Library/Java/JavaVirtualMachines/'
@@ -112,3 +113,15 @@ alias local-materialize="set-local-vars && java -jar $JAVA_OPTS ./target/data-ma
 alias new-maven-project='mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4'
 alias nmp='new-maven-project'
 alias mci='mvn clean install'
+
+
+##########################
+#                        #
+#    Gradle Commands     #
+#                        #
+##########################
+alias b='./gradlew'
+alias r='gradle'
+alias rcb='gradle clean build'
+
+

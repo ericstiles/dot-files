@@ -2,3 +2,31 @@ echo 'loading kroger aliases'
 
 alias kroger="cd ~/repo/kroger"
 
+#added to get by headless exception when call 'plantuml' directly
+alias plantuml='java -jar /opt/homebrew/Cellar/plantuml/1.2022.7/libexec/plantuml.jar'
+
+alias mobile='cd ~/repo/kroger/payments-connector-mobile'
+alias common='cd ~/repo/kroger/payments-connector-common'
+alias elera='cd ~/repo/kroger/payments-connector-elera'
+alias emulator='cd ~/repo/kroger/payments-connector-device-broker-emulator'
+alias core='cd ~/repo/kroger/payments-connector-core'
+alias models='cd ~/repo/kroger/payments-connector-models'
+
+alias rd='ssh docker@10.131.222.6'
+
+function rdc (){
+  if [ -z $1 ]; then
+    echo "usage rdc <file to copy>"
+    exit 1
+  fi
+  scp $1 docker@10.131.222.6:~
+}
+
+
+
+export VERIFONE_HOSTNAME=192.168.1.90
+export VERIFONE_LOG_LEVEL=LOG_DEBUG
+export VERIFONE_FILE_LOCATION=PSDKLogs.txt
+export VERIFONE_FILE_SIZE=512000
+export ELERA_LOCAL=true
+
