@@ -38,7 +38,8 @@ __git_complete gcm __git_main
 
 alias gcl='git clone'
 
-alias gco='git checkout'
+#alias gco='git checkout'
+alias gco='git_support.sh -o'
 __git_complete gco __git_main
 
 alias gcob='git checkout -b'
@@ -64,6 +65,7 @@ alias giset='git checkout --orphan newMaster;git add -A;git commit -m "initial c
 alias gl='git log'
 alias glp='git log --pretty=format:"%h %s" --graph'
 alias gm='git checkout main'
+alias main='git checkout main'
 alias gmm='git merge main'
 alias gp='git pull'
 __git_complete gp __git_main
@@ -82,6 +84,8 @@ alias gts='git stash save'
 alias gla='git log --pretty=format:"%h%x09%an%x09%ad%x09%s"'
 alias authors='git log --pretty=format:"%an" | sort | uniq'
 
+alias gacm='git add . && gcm'
+
 ## quick commit to test a change
 alias qc='git add .; git commit -m "quick commit: cleanup"'
 
@@ -98,6 +102,7 @@ alias qc='git add .; git commit -m "quick commit: cleanup"'
 
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 alias tests='chrome ./build/reports/tests/test/index.html 1>&2 2>/dev/null &'
+alias integrationTests='chrome ./build/reports/tests/integrationTest/index.html 1>&2 2>/dev/null &'
 alias jacoco='chrome ./build/reports/jacoco/test/html/index.html 1>&2 2>/dev/null &'
 alias pmdmain='chrome ./build/reports/pmd/main.html 1>&2 2>/dev/null &'
 alias pmdtest='chrome ./build/reports/pmd/test.html 1>&2 2>/dev/null &'

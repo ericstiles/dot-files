@@ -46,11 +46,11 @@ if [ -r "${REPOSITORY_DIR}/bash/.bash_postgres" ]; then
   . ${REPOSITORY_DIR}/bash/.bash_postgres
 fi
 
-
-if [ -r "${REPOSITORY_DIR}/bash/.bash_kroger" ]; then
-  . ${REPOSITORY_DIR}/bash/.bash_kroger
-fi
-
+# loop on bash/other 
+for file in $(find ${REPOSITORY_DIR}/bash/other -maxdepth 1 -type f);
+do
+  . $file
+done
 
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
@@ -88,7 +88,7 @@ export HISTSIZE=16000
 export PATH="$(go env GOPATH)/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
-
+export PATH="~/repo/dot-files/bash/scripts:$PATH"
 
 ################################
 #                              #
@@ -158,8 +158,6 @@ function newline-prompt() {
     printf "\n$ "
 }
 
-
-
 #Original PS1
 #export PS1='\h:\W \u\$'
 export PS1='\u: \[\033[38;5;13m\]\w\[\033[00m\]\[\033[0;33m\]$(git-branch-prompt)\[\033[38;5;182m\]$(aws-vault-prompt)\[\033[0;91m\]$(pg-prompt)\[\033[00m\]\[\033[38;5;33m\]$(k-prompt)\[\033[00m\]$(newline-prompt)'
@@ -187,8 +185,12 @@ source ~/.git_completion.bash
 
 # >>> talisman >>>
 # Below environment variables should not be modified unless you know what you are doing
-//export TALISMAN_HOME=/Users/THW9790/.talisman/bin
-//alias talisman=$TALISMAN_HOME/talisman_darwin_arm64
-//export TALISMAN_INTERACTIVE=true
+export TALISMAN_HOME=/Users/THW9790/.talisman/bin
+#alias talisman=$TALISMAN_HOME/talisman_darwin_arm64
+export TALISMAN_INTERACTIVE=true
 # <<< talisman <<<
 
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/THW9790/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

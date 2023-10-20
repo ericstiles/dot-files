@@ -1,11 +1,16 @@
 echo "Loading functions"
 
-function setJava(){
 
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/"
+function realsympath(){
+  if [ -z $1 ]
+  then
+    echo "Requires executable name"
+    exit 1
+  fi
+
+  dirname $(realpath $(which $1))
 
 }
-
 
 
 #function gorm(){
@@ -354,13 +359,54 @@ function worm-sha() {
     worm $1 | grep -v command | awk '{print $2}' | head -n 1 |sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g'
 }
 
-function certs() {
-	echo '# H-E-B Production Root CA v3' && \
-	curl 'http://pki.heb.com/pki/hebProdRootCAv3.cer' && \
-	echo '# H-E-B Production Infrastructure CA v2' && \
-	curl 'http://pki.heb.com/pki/HEBInfrastructureCAv2.cer' && \
-	echo '# H-E-B Certification Root CA v3' && \
-	curl 'http://certpki.heb.com/certpki/hebCertRootCAv3.cer' && \
-	echo '# H-E-B Certification Infrastructure CA v2' && \
-	curl 'http://certpki.heb.com/certpki/hebCertInfraCAv2.cer'
+function set-branch-name(){
+      pattern="\[([^]]+)\]"
+      input="$(git branch --show-current)"
+
+      if [[ $input =~ $pattern ]]; then
+        export CURRENT_BRANCH_NAME="${BASH_REMATCH[1]}"
+        return 0
+      fi
+      unset $CURRENT_BRANCH_NAME
+      return 1
 }
+
+#create feature branch or no jira branch
+function gcf(){
+  if [[ -z "$1" ]]; then
+    if [[ ! -z "$PREVIOUS_BRANCH_NAME" ]]; then
+        set-branch-name
+        git checkout $PREVIOUS_BRANCH_NAME
+        export PREVIOUS_BRANCH_NAME=$CURRENT_BRANCH_NAME
+        set-branch-name
+        return 0
+    else
+      echo "nothing to do, no known previous branch name"
+      set-branch-name
+    fi
+    return 1
+    #branch_name="nojira"
+  elif [[ "$1" =~ ^[0-9]{5} ]]; then
+    branch_name="feature/ngpos-$1"
+  else
+    branch_name="nojira-$1"
+  fi
+  echo "creating branch: ${branch_name}"
+  set-branch-name
+  echo "after set branch name"
+
+  #check if branch already exists
+  #if so then switch to it
+
+  git checkout -b "$branch_name"
+  echo "after gbc"
+  if [[ $? -eq 0 ]]; then
+    export PREVIOUS_BRANCH_NAME=$CURRENT_BRANCH_NAME
+    set-branch-name
+    return 0
+  fi
+  return 1
+}
+
+
+

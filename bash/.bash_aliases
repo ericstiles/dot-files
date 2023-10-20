@@ -29,9 +29,11 @@ alias c='clear'
 alias cls='printf "\033c"'
 alias e='exit'
 alias env='env | sort'
+alias eg='env | grep'
+
 alias eject='drutil eject'                      # eject cd
 alias h=history                                 # show the history of commands issued
-alias hg='history | grep'
+alias hg='history | grep -E -i'
 #alias idea='cd ~/IdeaProjects'
 alias ji='jenv versions'
 alias ks='echo "stopping running shaded app"; kill -9 `pgrep -f shaded`'           #Kill running shaded jar
@@ -121,7 +123,18 @@ alias mci='mvn clean install'
 #                        #
 ##########################
 alias b='./gradlew'
-alias r='gradle'
-alias rcb='gradle clean build'
 
 
+###############################
+#                             #
+#    git_support Commands     #
+#                             #
+###############################
+alias feature='git_support.sh -f'
+alias f=feature
+alias bug='git_support.sh -b'
+alias b=bug
+alias prev='git_support.sh -r'
+alias r=prev
+alias cap='git_support.sh -p'
+alias push='git_support.sh -u'
