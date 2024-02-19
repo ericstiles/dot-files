@@ -1,6 +1,6 @@
 fileignoreconfig:
 - filename: bash/.bash_aliases
-  checksum: 3245fd4a7b987acf9ba3057f03e6a32005d3a9defddbdcee005d41bdf6d96538
+  checksum: 7c245518a063cfe326aba9fd6184a1fac8affd48a483647aee89764e906ea410
 - filename: bash/.bash_profile
   checksum: f882d1c1348841a712437272e6349b4cedfe75a074b8c4ed1e36ca8bbe09945d
 - filename: bash/.bashrc
