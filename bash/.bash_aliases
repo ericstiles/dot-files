@@ -17,6 +17,9 @@ alias cu='~/repo/docker-utils/container-utils.sh'
 alias iu='~/repo/docker-utils/images-utils.sh'
 alias vu='docker volume'
 alias drma='d rm $(d ps -a | sed ''s~\t~\ ~g;  s~\ \ ~\ ~g;'' | cut -d'' '' -f1 | sed 1d)'
+alias ds='docker ps --format "{{ .ID }}\t{{.Image}}\t{{ .Names }}"'
+alias jsonlogs="docker ps --format '{{ json .}}' | jq ."
+
 
 ##################
 #                #
@@ -44,6 +47,7 @@ alias p="ps -ef"
 alias p3="python3"
 #alias reload="exec $SHELL -l"
 alias repo='cd ~/repo'
+alias repo2='cd ~/repo2'
 alias sqldeveloper='nohup /Applications/SQLDeveloper.app/Contents/MacOS/sqldeveloper.sh &'
 alias sql='sqldeveloper'
 alias va='vi ~/.bash_aliases'
@@ -79,6 +83,9 @@ alias psd='pgrep -f shaded'
 alias edit=vi
 alias help=man
 alias path="echo $PATH"
+
+# remove all *.orig files recursively
+alias orig='find . -name "*.orig" -type f -exec rm {} \;'
 
 ############################
 #                          #
@@ -116,7 +123,6 @@ alias new-maven-project='mvn archetype:generate -DarchetypeGroupId=org.apache.ma
 alias nmp='new-maven-project'
 alias mci='mvn clean install'
 
-
 ##########################
 #                        #
 #    Gradle Commands     #
@@ -124,17 +130,46 @@ alias mci='mvn clean install'
 ##########################
 alias b='./gradlew'
 
-
 ###############################
 #                             #
 #    git_support Commands     #
 #                             #
 ###############################
-alias feature='git_support.sh -f'
+alias git_support='git_support.sh'
+alias feature='git_support -f'
 alias f=feature
-alias bug='git_support.sh -b'
+alias bug='git_support -b'
 alias b=bug
-alias prev='git_support.sh -r'
+alias prev='git_support -r'
 alias r=prev
-alias cap='git_support.sh -p'
-alias push='git_support.sh -u'
+alias cap='git_support -p'
+alias push='git_support -u'
+alias acm='git_support -c'
+alias pull='git_support -l'
+
+
+
+
+
+
+
+
+
+#https://opensource.com/article/19/7/bash-aliases
+
+#You can use the ls command to create an alias to help you find where you left off:
+#The output is simple, although you can extend it with the --long option if you prefer.
+alias left='ls -t -1'
+
+#count files
+alias count='find . -type f | wc -l'
+
+#copy with a progress bar
+alias cpv='rsync -ah --info=progress2'
+
+
+alias cg='cd `git rev-parse --show-toplevel`'
+alias startgit='cd `git rev-parse --show-toplevel` && git checkout master && git pull'
+
+
+

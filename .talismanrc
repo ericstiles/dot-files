@@ -1,8 +1,12 @@
 fileignoreconfig:
 - filename: bash/.bash_aliases
-  checksum: df1f5d213df11ea309ce48b4c73e7f245512cbc39ad1b34c80ee7dd6ba27b893
+  checksum: 3245fd4a7b987acf9ba3057f03e6a32005d3a9defddbdcee005d41bdf6d96538
 - filename: bash/.bash_profile
   checksum: f882d1c1348841a712437272e6349b4cedfe75a074b8c4ed1e36ca8bbe09945d
 - filename: bash/.bashrc
   checksum: 03e07f39f7d7ea2a011c178891f893e79494d1009856e011e85211dec37415ea
+- filename: bash/scripts/git_support.sh
+  checksum: 6dda6fa592371cb615fb3629ccbf03c36c17170b059ddaafdb0d5fb9bb27a488
+- filename: bash/scripts/setup_tmux.sh
+  checksum: 62a30c6094cf41f85d4fe086fd1028af883d92563287aba18634268eaedcea28
 version: "1.0"

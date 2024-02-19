@@ -69,6 +69,7 @@ alias main='git checkout main'
 alias gmm='git merge main'
 alias gp='git pull'
 __git_complete gp __git_main
+alias ge='git rebase'
 
 alias gph='git push'
 __git_complete gph __git_main

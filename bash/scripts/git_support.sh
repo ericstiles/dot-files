@@ -9,6 +9,7 @@ function help(){
   echo ""
   echo "  -c                   : git add .; git commit -m \$1"
   echo "  -p                   : git add .; git commit -m \$1; git push origin <current branch>"
+  echo "  -l                   : pull origin current_branch_name"
   echo "  -q                   : set branch to previous branch history"
   echo "  -s                   : set current branch to history"
   echo "  -o                   : checkout branch. filter required"
@@ -29,9 +30,24 @@ function set-current-branch-name(){
   echo "$(git branch --show-current)" > $CURRENT_BRANCH_NAME
 }
 
+#Create or checkout a branch
+# 1. check if branch exists locally, if so checkout
+# 2. check if branch exists remotely, if so branch with that upstream and checkout
+# 3. check if branch matches 4 or 5 digite number if so branch as a feature/bug, project key, number
+# 4. check if an argument is pass, by this point would be a nonjira branch with argument
+# 5. finally create a nojira branch
 function create-branch(){
-        #check for starting numbers
-        if [[ "$2" =~ ^[0-9]{4,5} ]]; then
+        remote_branch=''
+        options='-b'
+        list_remote_branches="$(git branch -a | grep -v HEAD | grep -v main | grep origin | grep ${2} | tr -d ' ')"
+        list_local_branches="$(git branch | grep -v main | grep ${2} | tr -d ' ')"
+        if [ $(echo ${list_local_branches} |  grep -c '.'  ) == 1 ]; then
+          branch_name="${list_local_branches}"
+          options=''
+        elif [ $(echo ${list_remote_branches} |  grep -c '.'  ) == 1 ]; then
+          remote_branch="${list_remote_branches#"remotes/"}"
+          branch_name="${list_remote_branches#"remotes/origin/"}"
+        elif [[ "$2" =~ ^[0-9]{4,5} ]]; then
           branch_name="${1}/${PROJECT_KEY}-${2}"
         elif [[ -n "$1" ]]; then
           branch_name="nojira-${2}"
@@ -39,21 +55,20 @@ function create-branch(){
           branch_name="nojira"
         fi
 
-        #check if branch exists
-        #if it exists just checkout
-
-        #otherwise create and checkout branch
         set-current-branch-name
-        echo "creating branch: $branch_name"
-        git checkout -b "$branch_name"
+        echo "creating branch: ${branch_name}"
+        echo "git checkout ${options} ${branch_name} ${remote_branch}"
+        git checkout ${options} ${branch_name} ${remote_branch}
         if [ $? -eq 0 ]; then
+          git branch -vv | grep "${branch_name}"
           set-previous-branch-name
           set-current-branch-name
         fi
 }
 
 function commit(){
-        if [ $(git diff | wc -l) -ne 0 ] ||
+        echo "commit() $1"
+        if [ $(git diff | wc -l) -ne 0 ] || [ $(git diff --cached | wc -l) -ne 0 ] ||
         [ $(git ls-files -o --exclude-standard | wc -l) -ne 0 ]; then
           git add .
           git commit -m "${commit_message}"
@@ -62,24 +77,32 @@ function commit(){
         return 1
 }
 
+function not_implemented(){
+  echo "not implemented: ${*}"
+}
+
 if [ -z $1 ]; then
  help
  exit
 fi
 
-while getopts "hsqpnpcrfbuo:" opt; do
+while getopts "hsqpnpcrfbulo:" opt; do
   case ${opt} in
     c)
+#     echo "-c option"
       # Check next positional parameter
       eval nextopt=\${$OPTIND}
       # existing or starting with dash?
+      echo "nextopt: '$nextopt'"
       if [[ -n $nextopt && $nextopt != -* ]] ; then
         OPTIND=$((OPTIND + 1))
         commit_message=$nextopt
+#        echo "commit message: $commit_message"
       else
         commit_message="cleanup: quick commit"
+#        echo "commit message: $commit_message"
       fi
-      commit $commit_message
+      commit "${commit_message}"
       set-current-branch-name
       ;;
     b)
@@ -198,6 +221,11 @@ while getopts "hsqpnpcrfbuo:" opt; do
     u)
       branch=$(git branch --show-current)
       git push origin ${branch}
+      ;;
+    l)
+#      not_implemented "${*}"
+      set-current-branch-name
+      git pull origin $(git branch --show-current)
       ;;
     h)
      help
