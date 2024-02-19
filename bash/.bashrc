@@ -182,15 +182,3 @@ export NVM_DIR="$HOME/.nvm"
 source ~/.git_completion.bash
 
 # source ~/bin/.maven_bash_completion.bash
-
-# >>> talisman >>>
-# Below environment variables should not be modified unless you know what you are doing
-export TALISMAN_HOME=/Users/THW9790/.talisman/bin
-#alias talisman=$TALISMAN_HOME/talisman_darwin_arm64
-export TALISMAN_INTERACTIVE=true
-# <<< talisman <<<
-
-
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/THW9790/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
