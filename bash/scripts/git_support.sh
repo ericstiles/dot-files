@@ -7,6 +7,7 @@ PROJECT_KEY=ngpos
 function help(){
   echo "USAGE $0 [argument>"
   echo ""
+  echo "  -a                   : show current branch"
   echo "  -c                   : git add .; git commit -m \$1"
   echo "  -p                   : git add .; git commit -m \$1; git push origin <current branch>"
   echo "  -l                   : pull origin current_branch_name"
@@ -67,12 +68,16 @@ function create-branch(){
 }
 
 function commit(){
-        echo "commit() $1"
+        echo "commit(): $1"
         if [ $(git diff | wc -l) -ne 0 ] || [ $(git diff --cached | wc -l) -ne 0 ] ||
         [ $(git ls-files -o --exclude-standard | wc -l) -ne 0 ]; then
+          echo "Passed into commit"
           git add .
-          git commit -m "${commit_message}"
+          git commit -m "${1}"
+          echo "successful:$?"
           return $?
+        else
+          echo "Didn't pass into commit"
         fi
         return 1
 }
@@ -86,8 +91,11 @@ if [ -z $1 ]; then
  exit
 fi
 
-while getopts "hsqpnpcrfbulo:" opt; do
+while getopts "ahsqpnpcrfbulo:" opt; do
   case ${opt} in
+    a)
+      git branch --show-current
+      ;;
     c)
 #     echo "-c option"
       # Check next positional parameter
@@ -97,11 +105,10 @@ while getopts "hsqpnpcrfbulo:" opt; do
       if [[ -n $nextopt && $nextopt != -* ]] ; then
         OPTIND=$((OPTIND + 1))
         commit_message=$nextopt
-#        echo "commit message: $commit_message"
       else
-        commit_message="cleanup: quick commit"
-#        echo "commit message: $commit_message"
+        commit_message="cleanup: quick"
       fi
+      echo "committing (message): ${commit_message}"
       commit "${commit_message}"
       set-current-branch-name
       ;;

@@ -14,9 +14,6 @@ if [[ -r ~/.bash_secrets ]]; then
   . ~/.bash_secrets
 fi
 
-echo "starting path"
-echo $PATH
-
 export REPOSITORY_DIR=~/repo/dot-files
 if [ -r "${REPOSITORY_DIR}/bash/.bash_aliases" ]; then
   . ${REPOSITORY_DIR}/bash/.bash_aliases
@@ -49,22 +46,33 @@ fi
 # loop on bash/other 
 OTHER=${REPOSITORY_DIR}/bash/other
 if [ -r "${OTHER}" ]; then
-  echo "other files exist, loading"
+  echo "Other files exist, loading"
   for file in $(find ${OTHER} -maxdepth 1 -type f);
     do
 #      echo "---> $file"
       . $file
     done
 else
-  echo "skipping loading local files: ${OTHER}"
+  echo "Skipping loading local files: ${OTHER}"
 fi
 
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-  echo 'installed - git autocomplete'
+FILE_TO_LOAD=~/.git-completion.bash
+if [ -f "${FILE_TO_LOAD}" ]; then
+  . "${FILE_TO_LOAD}"
+  echo "installed - ${FILE_TO_LOAD}"
 else
-  echo 'not installed - git auto complete'
+  echo "not installed - ${FILE_TO_LOAD}"
 fi
+
+
+FILE_TO_LOAD=~/bin/.maven_bash_completion.bash
+if [ -f "${FILE_TO_LOAD}" ]; then
+  . "${FILE_TO_LOAD}"
+  echo "installed - ${FILE_TO_LOAD}"
+else
+  echo "not installed - ${FILE_TO_LOAD}"
+fi
+
 
 #if [[ "$(ssh-add -l)" == "The agent has no identities." ]]; then
 #   ssh-add ~/.ssh/prometheus_rsa_stg
@@ -186,6 +194,3 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-source ~/.git_completion.bash
-
-# source ~/bin/.maven_bash_completion.bash

@@ -1,4 +1,4 @@
-echo "loading common aliases"
+echo "Loading common aliases"
 
 #####################
 #                   #
@@ -59,6 +59,7 @@ alias gd='git diff'
 __git_complete gd __git_main
 
 alias gfo='git fetch origin'
+
 __git_complete g __git_main
 
 alias giset='git checkout --orphan newMaster;git add -A;git commit -m "initial commit";git branch -D main;git branch -m main;git push -f origin main;git gc --aggressive --prune=all'
@@ -68,13 +69,13 @@ alias gm='git checkout main'
 alias main='git checkout main'
 alias gmm='git merge main'
 alias gp='git pull'
+
 __git_complete gp __git_main
 alias ge='git rebase'
 
 alias gph='git push'
 __git_complete gph __git_main
 
-alias gpm='git fetch; git pull origin main'
 alias gr='git reset'
 __git_complete gr __git_main
 
@@ -115,6 +116,6 @@ alias pmdtest='chrome ./build/reports/pmd/test.html 1>&2 2>/dev/null &'
 #                  #
 ####################
 
-alias gcbs='gradle clean build shadowJar'
+alias gw='./gradlew'
 
 
