@@ -7,3 +7,5 @@ if [ -n "$BASH" ] && [ -r ~/.bashrc ]; then
 else
   echo 'skipped loading .bashrc'
 fi
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"

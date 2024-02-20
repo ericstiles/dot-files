@@ -47,10 +47,17 @@ if [ -r "${REPOSITORY_DIR}/bash/.bash_postgres" ]; then
 fi
 
 # loop on bash/other 
-for file in $(find ${REPOSITORY_DIR}/bash/other -maxdepth 1 -type f);
-do
-  . $file
-done
+OTHER=${REPOSITORY_DIR}/bash/other
+if [ -r "${OTHER}" ]; then
+  echo "other files exist, loading"
+  for file in $(find ${OTHER} -maxdepth 1 -type f);
+    do
+#      echo "---> $file"
+      . $file
+    done
+else
+  echo "skipping loading local files: ${OTHER}"
+fi
 
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
