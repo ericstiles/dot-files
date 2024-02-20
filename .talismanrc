@@ -9,10 +9,6 @@ fileignoreconfig:
   checksum: 6dda6fa592371cb615fb3629ccbf03c36c17170b059ddaafdb0d5fb9bb27a488
 - filename: bash/scripts/setup_tmux.sh
   checksum: 62a30c6094cf41f85d4fe086fd1028af883d92563287aba18634268eaedcea28
-- filename: bash/.bash_profile
-  checksum: 1152594bacdb5acb6757f01ce47f578ded8741ba32bdc934f2bc825791fd784b
-- filename: bash/.bashrc
-  checksum: 33050c63e760727c80c838992293b1d96db5d304f86a9d9403f2a5c6d7c416c8
 version: "1.0"
 fileignoreconfig:
 - filename: bash/.bash_profile
