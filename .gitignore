@@ -33,5 +33,5 @@ hs_err_pid*
 # ignore unique files in this directory
 ignore
 
-bash/other/.bash_*
+bash/local/.bash_*
 

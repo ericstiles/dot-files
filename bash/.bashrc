@@ -43,18 +43,12 @@ if [ -r "${REPOSITORY_DIR}/bash/.bash_postgres" ]; then
   . ${REPOSITORY_DIR}/bash/.bash_postgres
 fi
 
-# loop on bash/other 
-OTHER=${REPOSITORY_DIR}/bash/other
-if [ -r "${OTHER}" ]; then
-  echo "Other files exist, loading"
-  for file in $(find ${OTHER} -maxdepth 1 -type f);
-    do
-#      echo "---> $file"
-      . $file
-    done
-else
-  echo "Skipping loading local files: ${OTHER}"
-fi
+OTHER=${REPOSITORY_DIR}/bash/local
+echo "Loading local files: ${OTHER}"
+for file in $( find ${OTHER} -type f -name ".bash*" -maxdepth 1 ); do
+#  echo $file
+  . $file
+done
 
 FILE_TO_LOAD=~/.git-completion.bash
 if [ -f "${FILE_TO_LOAD}" ]; then
@@ -63,7 +57,6 @@ if [ -f "${FILE_TO_LOAD}" ]; then
 else
   echo "not installed - ${FILE_TO_LOAD}"
 fi
-
 
 FILE_TO_LOAD=~/bin/.maven_bash_completion.bash
 if [ -f "${FILE_TO_LOAD}" ]; then
