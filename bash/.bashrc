@@ -53,17 +53,17 @@ done
 FILE_TO_LOAD=~/.git-completion.bash
 if [ -f "${FILE_TO_LOAD}" ]; then
   . "${FILE_TO_LOAD}"
-  echo "installed - ${FILE_TO_LOAD}"
+  echo "Installed locally - ${FILE_TO_LOAD}"
 else
-  echo "not installed - ${FILE_TO_LOAD}"
+  echo "Not installed locally - ${FILE_TO_LOAD}"
 fi
 
 FILE_TO_LOAD=~/bin/.maven_bash_completion.bash
 if [ -f "${FILE_TO_LOAD}" ]; then
   . "${FILE_TO_LOAD}"
-  echo "installed - ${FILE_TO_LOAD}"
+  echo "Installed locally - ${FILE_TO_LOAD}"
 else
-  echo "not installed - ${FILE_TO_LOAD}"
+  echo "Not installed locally - ${FILE_TO_LOAD}"
 fi
 
 
