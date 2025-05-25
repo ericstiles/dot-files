@@ -20,7 +20,6 @@ alias drma='d rm $(d ps -a | sed ''s~\t~\ ~g;  s~\ \ ~\ ~g;'' | cut -d'' '' -f1 
 alias ds='docker ps --format "{{ .ID }}\t{{.Image}}\t{{ .Names }}"'
 alias jsonlogs="docker ps --format '{{ json .}}' | jq ."
 
-
 ##################
 #                #
 # Alias Commands #
@@ -41,6 +40,7 @@ alias hg='history | grep -E -i'
 alias ji='jenv versions'
 alias ks='echo "stopping running shaded app"; kill -9 `pgrep -f shaded`'           #Kill running shaded jar
 alias list-java='ll /Library/Java/JavaVirtualMachines/'
+alias m=multipass
 alias np="ps -ef|wc -l"                         # np - number of processes running
 alias nu="who|wc -l"                            # nu - number of users
 alias p="ps -ef"

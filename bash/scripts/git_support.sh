@@ -73,8 +73,7 @@ function commit(){
         [ $(git ls-files -o --exclude-standard | wc -l) -ne 0 ]; then
           echo "Passed into commit"
           git add .
-          echo "added successfully"
-          git commit -m ${@}
+          git commit -m "${1}"
           echo "successful:$?"
           return $?
         else
@@ -109,38 +108,9 @@ while getopts "ahsqpnpcrfbulo:" opt; do
       else
         commit_message="cleanup: quick"
       fi
-      echo "committing (message): ${commit_message} ${@:$OPTIND}"
-      echo $#
-      echo $1
-      echo $2
-      echo $3
-      args="-m"
-      args="${args} "${2}
-      echo ${args}
-      git add .
-      git commit -m "${2}"
-
-#
-#      args=""
-#      for arg_set in "${@:$OPTIND}"; do
-##      for arg_set in "$@"; do
-#          echo $arg_set
-#          args="$args -m \"$arg_set\""
-#      done
-#      echo "$args"
-#      #Loop on messages to add -m
-#      #$ acm "1" "2" "3" "4"
-#      #nextopt: '1'
-#      #committing (message): 1 2 3 4
-##      args=" ${@:OPTIND}"
-##      args2="${args// / -m }"
-##      echo $args2
-#      echo "committing (message): -m \"${commit_message}\" ${args}"
-#      git add .
-#      git commit  ${args}
-##
-##      commit "\"${commit_message}\" $args"
-##      set-current-branch-name
+      echo "committing (message): ${commit_message}"
+      commit "${commit_message}"
+      set-current-branch-name
       ;;
     b)
       # Check next positional parameter

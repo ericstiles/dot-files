@@ -58,7 +58,7 @@ else
   echo "Not installed locally - ${FILE_TO_LOAD}"
 fi
 
-FILE_TO_LOAD=~/bin/.maven_bash_completion.bash
+FILE_TO_LOAD=~/.maven-bash-completion.bash
 if [ -f "${FILE_TO_LOAD}" ]; then
   . "${FILE_TO_LOAD}"
   echo "Installed locally - ${FILE_TO_LOAD}"
@@ -187,3 +187,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/ericstiles/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

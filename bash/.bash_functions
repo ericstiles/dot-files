@@ -422,8 +422,42 @@ function docker () {
             | awk '{printf "\033[1;32m%s\t\033[01;38;5;95;38;5;196m%s\t\033[00m\033[1;34m%s\t\033[01;90m%s %s %s %s %s %s %s\033[00m\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10;}' \
             | column -s$'\t' -t \
             | awk 'NR<2{print $0;next}{print $0 | "sort --key=2"}'
+    elif [[ "$@" == "stop all" ]]; then
+        command docker stop $(docker ps -a -q)
+    elif [[ "$@" == "rm all" ]]; then
+        command docker rm $(docker ps -a -q)
     else
         command docker "$@"
     fi
 }
 
+function db (){
+    if [ $# -lt 1 ]; then
+        echo 'Must provide container id'
+        return 1
+    elif [[ $# -eq 1 ]]; then
+      docker exec -it $1 bash
+    else
+      docker exec -it ${@}
+    fi
+}
+
+function lg (){
+  directory='.'
+
+  if [ $# -eq 2 ]; then
+    directory="${2}"
+    filter="${1}"
+    ls -alh ${directory} | grep -i ${filter}
+  elif [[ $# -eq 1 ]]; then
+    filter="${1}"
+    ls -alh ${directory} | grep -i ${filter}
+  elif [[ $# -eq 0 ]]; then
+    echo "$directory"
+    echo "$filter"
+    ls -alh ${directory}
+  else
+    echo "Unexpected issue grepping on list of files"
+    echo "lg [grep regex filter] [directory]"
+  fi
+}

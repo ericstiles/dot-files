@@ -46,19 +46,11 @@ filetype plugin indent on    " required
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline'
-Plugin 'fatih/vim-go'
+" Plugin 'fatih/vim-go'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'elzr/vim-json'
-
-
-
-
 Plugin 'puremourning/vimspector'
-
-
-
-
 
 " vimrc guideline
 "  https://github.com/romainl/idiomatic-vimrc
@@ -136,6 +128,14 @@ set history=1000
 "   set wildignore+=.pyc,.swp: Ignore files matching these patterns when opening files based on a glob pattern.
 
 "   https://neovim.io/doc/user/nvim.html#nvim
+
 if !has('nvim')
     set ttymouse=xterm2
 endif
+
+" g:CommandTPreferredImplementation='ruby'
+
+
+
+
+

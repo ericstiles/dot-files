@@ -1,0 +1,97 @@
+echo "Loading git aliases"
+
+#####################
+#                   #
+#    git aliases    #
+#                   #
+#####################
+#alias gbc='function _gbc(){ echo "start"; git branch "$1"; echo "middle"; git checkout "$1"; echo "end"  }; _gbc'
+#alias g='git'
+#__git_complete g __git_main
+#
+#alias ga='git add'
+#__git_complete ga __git_main
+#
+#alias gau='git add --update'
+#__git_complete gau __git_main
+#
+#alias gb='git branch'
+#__git_complete gb __git_main
+#
+#alias gba='git branch -a'
+#__git_complete gba __git_main
+#
+#alias gbc='git checkout -b'
+#__git_complete gbc __git_main
+#
+#alias gc='git checkout'
+#__git_complete gc __git_main
+#
+##alias gca='git commit --amend'
+##__git_complete gca __git_main
+#
+#alias gca='git commit -v -a'
+#__git_complete gca __git_main
+#
+alias gcmm='git commit --verbose -m'
+#__git_complete gcm __git_main
+#
+#alias gcl='git clone'
+#
+##alias gco='git checkout'
+#alias gco='git_support.sh -o'
+#__git_complete gco __git_main
+#
+#alias gcob='git checkout -b'
+#__git_complete gcob __git_main
+#
+#alias gcot='git checkout -t'
+#__git_complete gcot __git_main
+#
+#alias gcotb='git checkout --track -b'
+#__git_complete gcotb __git_main
+#
+#alias gct='git checkout --track'              #git checkout --track origin/branch
+#__git_complete gct __git_main
+#
+##alias gd='git diff | mate'
+#alias gd='git diff'
+#__git_complete gd __git_main
+#
+#alias gfo='git fetch origin'
+#
+#__git_complete g __git_main
+#
+#alias giset='git checkout --orphan newMaster;git add -A;git commit -m "initial commit";git branch -D main;git branch -m main;git push -f origin main;git gc --aggressive --prune=all'
+#alias gl='git log'
+#alias glp='git log --pretty=format:"%h %s" --graph'
+#alias gm='git checkout main'
+#alias main='git checkout main'
+#alias master='git checkout master'
+#alias gmm='git merge main'
+#alias gp='git pull'
+#
+#__git_complete gp __git_main
+#alias ge='git rebase'
+#
+#alias gph='git push'
+#__git_complete gph __git_main
+#
+#alias gr='git reset'
+#__git_complete gr __git_main
+
+alias gs='git status'
+alias gt='git stash'
+alias gtp='git stash pop'
+alias gts='git stash save'
+alias gla='git log --pretty=format:"%h%x09%an%x09%ad%x09%s"'
+alias authors='git log --pretty=format:"%an" | sort | uniq'
+
+alias gacm='git add . && gcm'
+
+## quick commit to test a change
+alias qc='git add .; git commit -m "quick commit: cleanup"'
+
+
+
+
