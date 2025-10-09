@@ -5,6 +5,18 @@ echo "Loading common aliases"
 
 #alias reload='source ~/.bash_profile'
 
+
+
+#########################
+#                       #
+#    Aet Commands       #
+#                       #
+#########################
+alias ae=aerospace
+alias aew='aerospace list-windows --all'
+alias aer='aerospace reload-config'
+alias aet='aerospace enable toggle'
+
 #########################
 #                       #
 #    Docker Commands    #
@@ -234,3 +246,18 @@ alias aer='aerospace reload-config'
 alias sk=sketchybar
 alias skr='sketchybar --reload'
 alias y='yt-dlp_macos'
+
+
+alias ae=aerospace
+alias aew='aerospace list-windows --all' 
+alias aer='aerospace reload-config'
+alias aet='aerospace enable toggle'
+ 
+#alias sk=sketchybar
+#alias skr='sketchybar --reload'
+
+alias y='yt-dlp_macos'
+
+
+
+
