@@ -1,3 +1,7 @@
 echo "loading .zsh_aliases"
 
 alias reload='source ~/.zshrc'
+
+alias h='history 0'
+alias hg='history 0 | grep'
+

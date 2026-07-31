@@ -83,3 +83,43 @@ function man() {
                 LESS_TERMCAP_us="$(printf '\e[1;32m')" \
                 man "$@"
 }
+
+function copy() {
+  # Check if pbcopy is available
+  if ! command -v pbcopy >/dev/null 2>&1; then
+    echo "Error: pbcopy command not found." >&2
+    return 1
+  fi
+
+  # If no arguments are provided
+  if [ $# -eq 0 ]; then
+    # Check if there is input on stdin
+    if ! [ -t 0 ]; then
+      pbcopy
+      return 0
+    else
+      echo "Usage: copy <file>... or command | copy" >&2
+      return 1
+    fi
+  fi
+
+  # Check if all provided arguments are readable files
+  for file in "$@"; do
+    if [ ! -f "$file" ]; then
+      echo "Error: File '$file' not found or is not a regular file." >&2
+      return 1
+    elif [ ! -r "$file" ]; then
+      echo "Error: File '$file' is not readable." >&2
+      return 1
+    fi
+  done
+
+  # Copy file(s) content to clipboard
+  if [ $# -eq 1 ]; then
+    # Use redirection instead of cat for a single file (performance/best practice)
+    pbcopy < "$1"
+  else
+    # Concatenate multiple files
+    cat "$@" | pbcopy
+  fi
+}

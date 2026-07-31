@@ -196,3 +196,11 @@ export PATH="/Users/ericstiles/.rd/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - bash)"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/wilder/.lmstudio/bin"
+# End of LM Studio CLI section
+
+. "$HOME/.cargo/env"
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path bash)"

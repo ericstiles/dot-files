@@ -70,6 +70,7 @@ alias lc="ls -C"
 alias lm="ls -al | more"
 alias ll="ls -alhGpF"
 alias ll="ls -alhGpF"
+alias lt="ll -t"
 
 alias ..='cd ..'
 alias ...='cd ../../../'
@@ -149,6 +150,11 @@ alias gw='./gradlew'
 #                     #
 #######################
 alias g=git
+alias main='git switch main'
+alias pull='git pull'
+alias back='git switch -'
+alias fetch='git fetch'
+alias gfp='git fetch --prune'
 
 ###############################
 #                             #
@@ -165,7 +171,7 @@ alias r=prev
 alias cap='git_support -p'
 alias push='git_support -u'
 alias acm='git_support -c'
-alias pull='git_support -l'
+#alias pull='git_support -l'
 
 # https://itnext.io/multitask-like-a-pro-with-the-wip-commit-2f4d40ca0192
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
@@ -260,4 +266,10 @@ alias y='yt-dlp_macos'
 
 
 
-
+########################
+#                      #
+#       Speckit        #
+#                      #
+########################
+alias sp=specify
+alias spe="specify extension"
