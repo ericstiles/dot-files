@@ -120,6 +120,22 @@ exit
 git branch -lvv | awk '{if ($0 ~ /^(\*)/ ) {next;} ;print}' | awk '!/worm-348/{print }'  |  awk '{print $1}' | xargs git branch -D
 }
 
+function feature(){
+  if [[ $# -ne 1 || "$1" == *" "* ]]; then
+    echo "Usage: feature <branch-name-no-spaces>"
+    return 1
+  fi
+  git checkout -b "feature/$1"
+}
+
+function bug(){
+  if [[ $# -ne 1 || "$1" == *" "* ]]; then
+    echo "Usage: bug <branch-name-no-spaces>"
+    return 1
+  fi
+  git checkout -b "bug/$1"
+}
+
 function glg(){
 if [[ -z "${1}" ]]; then
   echo "usage: glg [search string] <git log options: -p>"

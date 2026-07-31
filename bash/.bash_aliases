@@ -123,29 +123,8 @@ alias new-maven-project='mvn archetype:generate -DarchetypeGroupId=org.apache.ma
 alias nmp='new-maven-project'
 alias mci='mvn clean install'
 
-##########################
-#                        #
-#    Gradle Commands     #
-#                        #
-##########################
-alias b='./gradlew'
-
-###############################
-#                             #
-#    git_support Commands     #
-#                             #
-###############################
-alias git_support='git_support.sh'
-alias feature='git_support -f'
-alias f=feature
-alias bug='git_support -b'
-alias b=bug
-alias prev='git_support -r'
-alias r=prev
-alias cap='git_support -p'
-alias push='git_support -u'
-alias acm='git_support -c'
-alias pull='git_support -l'
+# git command aliases (feature/bug/push/pull/f/b) live in common/.common_aliases,
+# which is sourced by this shell too — see .bashrc
 
 # https://itnext.io/multitask-like-a-pro-with-the-wip-commit-2f4d40ca0192
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'

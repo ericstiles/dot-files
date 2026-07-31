@@ -156,22 +156,15 @@ alias back='git switch -'
 alias fetch='git fetch'
 alias gfp='git fetch --prune'
 
-###############################
-#                             #
-#    git_support Commands     #
-#                             #
-###############################
-alias git_support='git_support.sh'
-alias feature='git_support -f'
+#######################################
+#                                     #
+#    git branch/push shortcuts       #
+#                                     #
+#######################################
+# feature/bug are functions (see .common_functions / .bash_functions)
 alias f=feature
-alias bug='git_support -b'
 alias b=bug
-alias prev='git_support -r'
-alias r=prev
-alias cap='git_support -p'
-alias push='git_support -u'
-alias acm='git_support -c'
-#alias pull='git_support -l'
+alias push='git push -u origin HEAD'
 
 # https://itnext.io/multitask-like-a-pro-with-the-wip-commit-2f4d40ca0192
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'

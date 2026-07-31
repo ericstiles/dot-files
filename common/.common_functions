@@ -29,6 +29,27 @@ function mcd(){
   mkdir $1 && cd $1
 }
 
+#################
+#               #
+#      git      #
+#               #
+#################
+function feature(){
+  if [[ $# -ne 1 || "$1" == *" "* ]]; then
+    echo "Usage: feature <branch-name-no-spaces>"
+    return 1
+  fi
+  git checkout -b "feature/$1"
+}
+
+function bug(){
+  if [[ $# -ne 1 || "$1" == *" "* ]]; then
+    echo "Usage: bug <branch-name-no-spaces>"
+    return 1
+  fi
+  git checkout -b "bug/$1"
+}
+
 #extract a file checking multiple types
 ex () {
     if [ -f $1 ] ; then
