@@ -1,19 +1,13 @@
 
 
 # if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
    set -o vi
 # else
 #   export EDITOR='mvim'
 # fi
 
-# Custom configurations
-export REPOSITORY_DIR=~/repo/dot-files
-
-if [ -r ~/.secrets ]; then
-  . ~/.secrets
-fi
-
+# REPOSITORY_DIR is exported by .zsh_env (sourced from .zshenv, which always
+# runs before .zshrc)
 if [ -r "${REPOSITORY_DIR}/common/.common_functions" ]; then
   . ${REPOSITORY_DIR}/common/.common_functions
 fi
@@ -26,16 +20,8 @@ if [ -r "${REPOSITORY_DIR}/zsh/.zsh_aliases" ]; then
   . ${REPOSITORY_DIR}/zsh/.zsh_aliases
 fi
 
-#brew
-export PATH="/opt/homebrew/bin:$PATH"
-
-#jenv
-eval "$(jenv init -)"
-
 #Youtube DLP variables
 #export YT_ID=UC53mbhibbibQCKq0nov5AlA
-export YT_CC='--cookies-from-browser chrome'
-export YT_WL_URL=https://www.youtube.com/playlist?list=WL
 
 source /opt/homebrew/opt/git-extras/share/git-extras/git-extras-completion.zsh
 
@@ -58,10 +44,6 @@ setopt PROMPT_SUBST
 RPROMPT=''
 PROMPT='%~ $(parse_git_branch)
 %(?.%F{green}.%F{red})$%f '
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
-
 function keep (){
   mv ./data/tags/${1}.json ./data/keep/
 }
@@ -77,7 +59,14 @@ bindkey -v
 # Disable the audible/visual bell (e.g. Esc with nothing to do, no tab-complete match)
 unsetopt BEEP
 
-# Cursor shape + color by vi keymap (WezTerm, Tokyo Night palette)
+# Cursor shape + color by vi keymap (WezTerm, Tokyo Night palette). Guarded
+# behind an interactive+TTY check so these never get defined in a
+# non-interactive shell — Claude Code's Bash tool captures a snapshot of
+# this file's functions and replays it in short-lived subshells, and an
+# unguarded `zshexit` would fire (and leak its escape codes into tool
+# output) on every one of those subshells' exit, not just real terminal
+# sessions.
+if [[ -o interactive && -t 1 ]]; then
 # `set -o vi` / `bindkey -v` above switch zsh's line editor into vi-style
 # Normal/Insert keymaps but give no visual cue which one you're in. This
 # mirrors the t_SI/t_SR/t_EI cursor settings in ~/.vimrc: zle-keymap-select
@@ -128,6 +117,7 @@ zle -N zle-line-init
 zshexit() {
   print -n '\e[2 q\e]12;#c0caf5\x07'
 }
+fi
 
 
 #NeoVim/nvim
@@ -142,21 +132,9 @@ alias npy=nvim-python
 alias nvim-python2='NVIM_APPNAME="nvim-python2" nvim'
 alias np2=nvim-python2
 
-# MCPs
-PATH=~/repo/mcp/local-mcp-management:$PATH
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/wilder/.lmstudio/bin"
-# End of LM Studio CLI section
-
-# Added by Antigravity
-export PATH="/Users/wilder/.antigravity/antigravity/bin:$PATH"
-
-export PATH="$HOME/.local/bin:$PATH"
+# MCP/LM Studio/Antigravity/local-bin/ANDROID_HOME PATH additions live in
+# .zsh_env now (sourced from .zshenv, always runs before .zshrc)
 #export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
 #export JAVA_HOME="/opt/homebrew/Cellar/openjdk@17/17.0.18/libexec/openjdk.jdk/Contents/Home"
 
 # Conventional commit scripts

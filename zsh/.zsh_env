@@ -1,0 +1,49 @@
+# Pure environment setup, sourced unconditionally from ~/.zshenv so it
+# reaches every zsh invocation (interactive, non-interactive, login,
+# `zsh -c '...'`, scripts, cron) — not just ones that go through a full
+# interactive .zshrc bootstrap.
+#
+# Nothing in this file may touch the prompt, line editor, a TTY, or define
+# interactive-only functions/aliases — that stays in .zshrc.
+
+export EDITOR='vim'
+
+export REPOSITORY_DIR=~/repo/dot-files
+
+if [ -r ~/.secrets ]; then
+  . ~/.secrets
+fi
+
+#brew
+export PATH="/opt/homebrew/bin:$PATH"
+
+#Youtube DLP variables
+export YT_CC='--cookies-from-browser chrome'
+export YT_WL_URL=https://www.youtube.com/playlist?list=WL
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+# MCPs
+PATH=~/repo/mcp/local-mcp-management:$PATH
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/wilder/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# Added by Antigravity
+export PATH="/Users/wilder/.antigravity/antigravity/bin:$PATH"
+
+export PATH="$HOME/.local/bin:$PATH"
+
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+
+# jenv must be last: every export PATH="X:$PATH" above this line prepends
+# in front of whatever jenv put there, so jenv's shims would get shadowed
+# by pyenv/MCP/Antigravity/.local/bin/Android unless it goes after them.
+#jenv
+eval "$(jenv init -)"
+# jenv javahome resolves because `jenv global 21` was run previously
+export JAVA_HOME="$(jenv javahome)"

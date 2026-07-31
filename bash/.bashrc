@@ -201,6 +201,7 @@ eval "$(pyenv init - bash)"
 export PATH="$PATH:/Users/wilder/.lmstudio/bin"
 # End of LM Studio CLI section
 
+# Rust toolchain (rustup/cargo/rustc) — puts ~/.cargo/bin on PATH
 . "$HOME/.cargo/env"
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path bash)"
