@@ -57,3 +57,22 @@ fi
 ln -s ${BASE_DIR}/bash/${file} ~/${file}
 echo "created symbolic link"
 ls -l ~/${file}
+
+#setup claude code notifier hooks (see claude/hooks/CLAUDE_NOTIFY.md)
+mkdir -p ~/.claude/hooks
+for file in notify-human.sh claude-focus-pane.sh; do
+  if [[ -L ~/.claude/hooks/${file} ]]; then
+    echo "file exists and is symbolic: ~/.claude/hooks/${file}"
+    echo "removing symbolic link: ~/.claude/hooks/${file}"
+    rm ~/.claude/hooks/${file}
+  elif [ -f ~/.claude/hooks/${file} ]; then
+    echo "file exists and is not symbolic: ~/.claude/hooks/${file}"
+    echo "creating backup file: ~/.claude/hooks/${file}${BAK}"
+    mv ~/.claude/hooks/${file} ~/.claude/hooks/${file}${BAK}
+  else
+    echo "file doesn't exist: ~/.claude/hooks/${file}"
+  fi
+  ln -s ${BASE_DIR}/claude/hooks/${file} ~/.claude/hooks/${file}
+  echo "created symbolic link"
+  ls -l ~/.claude/hooks/${file}
+done

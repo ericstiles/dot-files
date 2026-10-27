@@ -42,3 +42,7 @@ bash/local/.bash_*
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+
+#claude notifier secrets (ntfy topic) live outside the repo; never commit them
+claude-notify/env
+*.ntfy-topic
