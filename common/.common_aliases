@@ -266,3 +266,12 @@ alias y='yt-dlp_macos'
 ########################
 alias sp=specify
 alias spe="specify extension"
+
+########################
+#                      #
+#    Focus (DND)       #
+#                      #
+########################
+# Runs the "Focus On" / "Focus Off" shortcuts (Shortcuts app, "Set Focus" action)
+alias focuson='shortcuts run "Focus On"'
+alias focusoff='shortcuts run "Focus Off"'
