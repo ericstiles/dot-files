@@ -24,7 +24,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 50
+accordion-padding = 30
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
@@ -40,8 +40,8 @@ key-mapping.preset = 'qwerty'
 
 # Mouse follows focus when focused monitor changes
 # Drop it from your config, if you don't like this behavior
-# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
-# See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
+# See: https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
@@ -52,26 +52,29 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [workspace-to-monitor-force-assignment]
-1 = 1                            # Monitor sequence number from left to right. 1-based indexing
-2 = 'main'                       # Main monitor
-3 = 'main'                       # Main monitor
-4 = 'main'                       # Main monitor
-5 = 'main'                       # Main monitor
-6 = 'main'                       # Main monitor
-7 = 'main'                       # Main monitor
-8 = 'main'                       # Main monitor
-9 = 'main'                       # Main monitor
+# When setup with 3 displays
+1 = ['S34CG50', 'built-in', 'U32J59x']
+2 = ['S34CG50', 'built-in', 'U32J59x']
+3 = ['S34CG50', 'built-in', 'U32J59x']
+4 = ['S34CG50', 'built-in', 'U32J59x']
+5 = ['S34CG50', 'built-in', 'U32J59x']
+6 = 'built-in'
+7 = 'built-in'
+8 = 'built-in'
+9 = 'built-in'
+0 = 'built-in'
 
-A = ['secondary','main']         # Windsurf - zmk, advantage kinesis
-B = ['secondary','main']         # Browser
-C = ['secondary','main']         # Code
-E = ['secondary','main']         # Editors
-F = ['secondary','main']         # Finder
-I = ['secondary','main']         # Intellij, iMovie
-N = ['secondary','main']         # Intellij, iMovie
-S = ['secondary','main']         # Spotify
-T = ['secondary','main']         # Terminal - warp
-W = ['secondary','main']         # Thoughtworks Browser
+A = ['U32J59x', 'main']   # Antigravity
+B = ['U32J59x', 'main']   # Browser
+C = ['U32J59x', 'main']   # Code
+E = ['U32J59x', 'main']   # Editors
+F = ['U32J59x', 'main']   # Finder
+I = ['U32J59x', 'main']   # ?
+M = ['U32J59x', 'main']   # LM Studio
+N = ['U32J59x', 'main']   # ?
+S = ['U32J59x', 'main']   # Spotify
+T = ['U32J59x', 'main']   # Thoughtworks Browser
+W = ['U32J59x', 'main']   # Wezterm
 
 # 4 = 'built-in'                  # Case insensitive regex substring
 # 5 = '^built-in retina display$' # Case insensitive regex match
@@ -80,13 +83,13 @@ W = ['secondary','main']         # Thoughtworks Browser
 inner.horizontal = 2
 inner.vertical =   2
 outer.left =       2
-outer.bottom =     40
-outer.top =        0
+outer.bottom =     2
+outer.top =        2
 outer.right =      2
 
-# 'main' binding mode declaration
+# 1 binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-# 'main' binding mode must be always presented
+# 1 binding mode must be always presented
 [mode.main.binding]
 
 # All possible keys:
@@ -117,11 +120,10 @@ outer.right =      2
 # end tell'
 # '''
 
-
-
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
+alt-shift-comma = 'layout v_accordion'   # focused group -> vertical accordion, no toggling (won't cascade to parent)
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-h = 'focus left'
@@ -158,6 +160,9 @@ alt-shift-f = 'move-node-to-workspace F'
 
 alt-i = 'workspace I'
 alt-shift-i = 'move-node-to-workspace I'
+
+alt-m = 'workspace M'
+alt-shift-m = 'move-node-to-workspace M'
 
 alt-n = 'workspace N'
 alt-shift-n = 'move-node-to-workspace N'
@@ -201,17 +206,27 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 alt-shift-semicolon = 'mode service'
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+
+# Window Display
+# Repo on source code ~/repo/aerospace-workspace-ui
+alt-shift-q = 'exec-and-forget ~/.local/bin/show-workspace'
+
 [mode.service.binding]
-  esc = ['reload-config', 'mode main']
+  esc = ['mode main']
+  l = ['reload-config']
   r = ['flatten-workspace-tree', 'mode main'] # reset layout
   #s = ['layout sticky tiling', 'mode main'] # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
   f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
   backspace = ['close-all-windows-but-current', 'mode main']
 
-  alt-shift-h = ['join-with left']
-  alt-shift-j = ['join-with down']
-  alt-shift-k = ['join-with up']
-  alt-shift-l = ['join-with right']
+  alt-h = ['join-with left']
+  alt-j = ['join-with down']
+  alt-k = ['join-with up']
+  alt-l = ['join-with right']
+
+[[on-window-detected]]
+if.app-id = 'com.google.antigravity-ide'
+run = "move-node-to-workspace A"
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
@@ -247,3 +262,10 @@ if.app-id = 'com.google.chrome'
 if.window-title-regex-substring = 'Picture-in-Picture'
 run = 'layout floating'
 
+
+
+# INSTRUCTIONS
+# Floating/tiling toggle in service mode
+# 1. Press alt-shift-; to enter service mode
+# 2. Still in toggle mode. With both windows joined, press f to toggle them to floating
+# 3. Pressing f again will toggle them back to tiling
