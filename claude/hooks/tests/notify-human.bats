@@ -135,6 +135,52 @@ run_hook() {
   ! grep -q "^osascript" "$STUB_LOG"
 }
 
+@test "blocked types are spoken" {
+  run_hook permission_prompt
+  assert_arg say "myrepo needs permission"
+}
+
+@test "idle is not spoken by default" {
+  run_hook idle_prompt
+  refute_line_prefix "say"
+}
+
+@test "idle is spoken when NOTIFY_SPEAK_IDLE=1" {
+  export NOTIFY_SPEAK_IDLE=1
+  run_hook idle_prompt
+  assert_arg say "myrepo is idle"
+}
+
+@test "NOTIFY_SPEAK=0 disables speech" {
+  export NOTIFY_SPEAK=0
+  run_hook permission_prompt
+  refute_line_prefix "say"
+}
+
+@test "dry run prints the waiting-list mark without touching state" {
+  run_hook permission_prompt
+  [[ "$output" == *"waiting mark sess-1 myrepo permission_prompt"* ]]
+  [ ! -d "$NOTIFY_STATE_DIR/waiting" ]
+}
+
+@test "live mode marks the session waiting and speaks" {
+  export NOTIFY_DRY_RUN=0
+  run_hook permission_prompt
+  [ "$status" -eq 0 ]
+  [ -f "$NOTIFY_STATE_DIR/waiting/sess-1" ]
+  sleep 0.3
+  grep -q "^say myrepo needs permission" "$STUB_LOG"
+}
+
+@test "muted sessions are still added to the waiting list" {
+  export NOTIFY_DRY_RUN=0
+  mkdir -p "$NOTIFY_STATE_DIR"
+  touch "$NOTIFY_STATE_DIR/MUTE"
+  run_hook permission_prompt
+  [ -f "$NOTIFY_STATE_DIR/waiting/sess-1" ]
+  ! grep -q "^say" "$STUB_LOG"
+}
+
 @test "no ntfy push without a configured topic" {
   run_hook permission_prompt
   refute_line_prefix "curl"

@@ -14,7 +14,7 @@ setup_sandbox() {
 
   local bin="$SANDBOX/bin"
   mkdir -p "$bin"
-  for cmd in tmux wezterm open terminal-notifier osascript; do
+  for cmd in tmux wezterm open terminal-notifier osascript say; do
     ln -sf "$BATS_TEST_DIRNAME/stubs/stub" "$bin/$cmd"
   done
   export PATH="$bin:$PATH"
