@@ -60,7 +60,7 @@ ls -l ~/${file}
 
 #setup claude code notifier hooks (see claude/hooks/CLAUDE_NOTIFY.md)
 mkdir -p ~/.claude/hooks
-for file in notify-human.sh claude-focus-pane.sh; do
+for file in notify-human.sh claude-focus-pane.sh claude-waiting.sh; do
   if [[ -L ~/.claude/hooks/${file} ]]; then
     echo "file exists and is symbolic: ~/.claude/hooks/${file}"
     echo "removing symbolic link: ~/.claude/hooks/${file}"

@@ -16,6 +16,9 @@ readonly NTFY_SERVER="${NTFY_SERVER:-https://ntfy.sh}"
 readonly DRY_RUN="${NOTIFY_DRY_RUN:-0}"
 readonly SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 readonly FOCUS_SCRIPT="$SCRIPT_DIR/claude-focus-pane.sh"
+readonly WAITING_SCRIPT="$SCRIPT_DIR/claude-waiting.sh"
+readonly SPEAK="${NOTIFY_SPEAK:-1}"
+readonly SPEAK_IDLE="${NOTIFY_SPEAK_IDLE:-0}"
 readonly SAFE_ID_RE='^[A-Za-z0-9_-]{1,128}$'
 readonly NTFY_TOPIC_RE='^[A-Za-z0-9_-]{1,64}$'
 
@@ -130,6 +133,24 @@ send_ntfy() { # topic title message priority
   fi
 }
 
+mark_waiting() { # session repo type
+  if [[ "$DRY_RUN" == "1" ]]; then
+    echo "waiting mark $1 $2 $3"
+  else
+    "$WAITING_SCRIPT" mark "$1" "$2" "$3" >/dev/null 2>&1 || true
+  fi
+}
+
+speak() { # type phrase
+  [[ "$SPEAK" == "1" ]] || return 0
+  [[ "$1" == "idle_prompt" && "$SPEAK_IDLE" != "1" ]] && return 0
+  if [[ "$DRY_RUN" == "1" ]]; then
+    printf '%s\n' say "$2"
+  else
+    (say "$2" >/dev/null 2>&1 &)
+  fi
+}
+
 main() {
   local input type message cwd session repo title subtitle focus target topic note
   input=$(cat)
@@ -145,6 +166,9 @@ main() {
   [[ "$type" =~ $SAFE_ID_RE ]] || type="unknown"
   repo=$(basename "${cwd:-unknown}")
 
+  # The waiting list is state, not an alert: keep it accurate even when muted or throttled.
+  [[ "$session" != "invalid" ]] && mark_waiting "$session" "$repo" "$type"
+
   if [[ -e "$STATE_DIR/MUTE" ]]; then log "$type" "$repo" "$session" "muted"; return 0; fi
   if is_throttled "$session" "$type"; then log "$type" "$repo" "$session" "throttled"; return 0; fi
 
@@ -157,6 +181,7 @@ main() {
 
   note=$(send_desktop "$title" "$subtitle" "$message" "claude-$session" "$focus")
   [[ "$DRY_RUN" == "1" ]] && { printf '%s\n' "$note"; note=""; }
+  speak "$type" "$repo $subtitle"
 
   topic=$(read_ntfy_topic)
   if [[ -n "$topic" ]]; then
