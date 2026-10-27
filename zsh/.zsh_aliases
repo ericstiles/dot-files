@@ -5,3 +5,5 @@ alias reload='source ~/.zshrc'
 alias h='history 0'
 alias hg='history 0 | grep'
 
+alias chrome-tw='open -na "Google Chrome" --args --user-data-dir="$HOME/Documents/TW_Chrome_Profile"'
+
